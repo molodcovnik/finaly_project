@@ -1,0 +1,23 @@
+venv/
+.DS_Store
+
+idea/
+
+# Created by https://www.gitignore.io/api/macos,linux,django,python,pycharm
+
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+
+# dotenv
+.env
+
+# virtualenv
+.venv
+ENV/
+
+.vscode/

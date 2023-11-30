@@ -1,0 +1,12 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+
+{% block content %}
+    {%if user.is_authenticated %}
+    <p>{{user.username}}</p>
+    {% else %}
+    <p>Anon</p>
+    {% endif %}
+    <p>{{name}}</p>
+{% endblock content %}
