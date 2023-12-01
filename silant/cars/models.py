@@ -2,6 +2,7 @@ from django.db import models
 
 from manuals.models import *
 from accounts.models import ClientUser
+from manuals.models import *
 
 
 class Machine(models.Model):
@@ -26,3 +27,46 @@ class Machine(models.Model):
     def __str__(self):
         return f'{self.model_technique} {self.serial_number_technique} {self.model_engine} {self.serial_number_engine} {self.shipment_date} {self.consignee} {self.delivery_address} {self.customer} {self.service_company}'
 
+
+class Maintenance(models.Model):
+    machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
+    maintenance_type = models.ForeignKey(TypeMaintenance, on_delete=models.CASCADE)
+    service_date = models.DateField()
+    operating_time = models.IntegerField()
+    work_order_number = models.CharField(max_length=128)
+    work_order_date = models.DateField()
+    service_company = models.ForeignKey(ClientUser, on_delete=models.CASCADE,
+                                        related_name='maintenances', limit_choices_to={'status': 'SERVICE'},
+                                        null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.machine} {self.maintenance_type} {self.service_date} {self.operating_time} {self.service_company} '
+
+
+class Claim(models.Model):
+    failure_date = models.DateField()
+    operating_time = models.IntegerField()
+    node_failure = models.ForeignKey(NodeFailure, on_delete=models.CASCADE)
+    description_failure = models.TextField(max_length=2048)
+    recovery_method = models.ForeignKey(RecoveryMethod, on_delete=models.CASCADE)
+    spares = models.TextField(max_length=1024, blank=True)
+    restore_date = models.DateField(blank=True, null=True)
+    downtime = models.IntegerField(blank=True, null=True)
+    machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.failure_date} {self.operating_time} {self.node_failure} {self.description_failure} {self.recovery_method} {self.spares} {self.restore_date} {self.downtime}'
+
+    @property
+    def downtime_machine(self):
+        if self.restore_date:
+            return (self.restore_date - self.failure_date).days
+        return 0
+
+    @property
+    def service(self):
+        return self.machine.service_company.name_company
+
+    def update_downtime(self):
+        self.downtime = (self.restore_date - self.failure_date).days
+        self.save()
