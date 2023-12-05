@@ -3,23 +3,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Auto</title>
+    <title>{% block title %}Мой Силант{% endblock title %}</title>
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
 </head>
 <body>
-    <header class="header-block">
+    <div class="wrapper">
+        <header class="header-block">
+            <div class="header-head">
+                <div class="header-logo">
+                    <a href="{% url 'main_page' %}"><img src="/static/images/logo_silant.jpg" alt="LOGO"></a>
+                </div>
+                <div class="header-contact"><p>+7-8352-20-12-09, telegram</p></div>
+                <div class="header-auth">
+                    {% if request.user.is_authenticated %}
+                        <p class="head-auth-btn"><a href="{% url 'logout' %}">Выйти</a></p>
+                    {% else %}
+                        <p class="head-auth-btn"><a href="{% url 'login' %}">Войти</a></p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="header-info">
+                <p>Электронная сервисная книжка "Мой Силант"</p>
+            </div>
+            <hr class="header-border">
+        </header>
+        <main>
+            <div class="main-container">
+                {% block content %}
 
-    </header>
-    <main>
-        <div class="main-container">
-            {% block content %}
-
-            {% endblock content %}
-        </div>
-    </main>
+                {% endblock content %}
+            </div>
+        </main>
+        <footer>
+            <hr class="header-border">
+            <div class="footer-container">
+                <div class="footer-contact">
+                    <p>+7-8352-20-12-09, telegram</p>
+                </div>
+                <div class="footer-logo">
+                    <p>Мой Силант 2023</p>
+                </div>
+            </div>
+        </footer>
+    </div>
 {% block scripts %}
     <script>
         console.log('fsfs');

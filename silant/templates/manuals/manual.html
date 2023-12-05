@@ -1,0 +1,18 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+
+{% block content %}
+    {% if manual %}
+        <a href="{% url 'manuals' %}">Back</a>
+        {%for man in manual%}
+            <div class="manual">
+                {{man.name}}
+                {{man.description}}
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <p>empty</p>
+    {% endif %}
+{% endblock content %}

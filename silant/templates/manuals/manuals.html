@@ -1,0 +1,157 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="manuals-container">
+        <div class="manual">
+            <h2>Модели</h2>
+            <p class="text-left"><a href="{% url 'manual_tech_create' %}" class="btn btn-secondary btn-sm">Новая модель техники</a></p>
+            {% for tech in technical %}
+                <div class="manual-detail">
+                    <div class="manual-info">
+                    <p>{{ tech.name }}</p>
+                    </p>{{ tech.description }}</p>
+                </div>
+                <div class="manual-action">
+                    <p class="text-left"><a href="{% url 'manual_tech_detail' tech.id %}" >Detail</a></p>
+                    <p class="text-left"><a href="{% url 'manual_tech_update' tech.id  %}" >Update</a></p>
+                    <p class="text-left"><a href="{% url 'manual_tech_delete' tech.id %}">Delete</a></p>
+                </div>
+            </div>
+            {% endfor %}
+            <a href="{% url 'manual_tech_list' %}">List</a>
+
+            
+        </div>
+        <div class="manual">
+            <h2>Двигатели</h2>
+            <p class="text-left"><a href="{% url 'manual_engine_create' %}" class="btn btn-secondary btn-sm">Новый двигатель</a></p>
+            {% for engine in engines %}
+                <div class="manual-detail">
+                    <div class="manual-info">
+                        <p>{{ engine.name }}</p>
+                        <p>{{ engine.description }}</p>
+                    </div>
+                    <div class="manual-action">
+                        <p class="text-left"><a href="{% url 'manual_engine_detail' engine.id %}" class="btn btn-secondary btn-sm">Detail</a></p>
+                        <p class="text-left"><a href="{% url 'manual_engine_update' engine.id  %}" class="btn btn-secondary btn-sm">Update</a></p>
+                        <p class="text-left"><a href="{% url 'manual_engine_delete' engine.id %}" class="btn btn-secondary btn-sm">Delete</a></p>
+                    </div>
+                </div>
+            {% endfor %}
+
+            
+
+        </div>
+        <div class="manual">
+            <h2>Трансмиссии</h2>
+            <p class="text-left"><a href="{% url 'manual_transmission_create' %}" class="btn btn-secondary btn-sm">Новая трансмиссия</a></p>
+            {% for transmission in transmissions %}
+                <div class="manual-detail">
+                    <div class="manual-info">
+                        <p>{{ transmission.name }}</p>
+                        <p>{{ transmission.description }}</p>
+                    </div>
+                    <div class="manual-action">
+                        <p class="text-left"><a href="{% url 'manual_transmission_detail' transmission.id %}" class="btn btn-secondary btn-sm">Detail</a></p>
+                        <p class="text-left"><a href="{% url 'manual_transmission_update' transmission.id  %}" class="btn btn-secondary btn-sm">Update</a></p>
+                        <p class="text-left"><a href="{% url 'manual_transmission_delete' transmission.id %}" class="btn btn-secondary btn-sm">Delete</a></p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+        <div class="manual">
+            <h2>Ведущие мосты</h2>
+            <p class="text-left"><a href="{% url 'manual_driving_bridge_create' %}" class="btn btn-secondary btn-sm">Новый ведущий мост</a></p>
+            {% for driving_bridge in driving_bridges %}
+                <div class="manual-detail">
+                    <div class="manual-info">
+                        <p>{{ driving_bridge.name }}</p>
+                        <p>{{ driving_bridge.description }}</p>
+                    </div>
+                    <div class="manual-action">
+                        <p class="text-left"><a href="{% url 'manual_driving_bridge_detail' driving_bridge.id %}" class="btn btn-secondary btn-sm">Detail</a></p>
+                        <p class="text-left"><a href="{% url 'manual_driving_bridge_update' driving_bridge.id  %}" class="btn btn-secondary btn-sm">Update</a></p>
+                        <p class="text-left"><a href="{% url 'manual_driving_bridge_delete' driving_bridge.id %}" class="btn btn-secondary btn-sm">Delete</a></p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+        <div class="manual">
+            <h2>Управляемые мосты</h2>
+            <p class="text-left"><a href="{% url 'manual_steered_bridge_create' %}" class="btn btn-secondary btn-sm">Новый управляющий мост</a></p>
+            {% for steered_bridge in steered_bridges %}
+                <div class="manual-detail">
+                    <div class="manual-info">
+                        <p>{{ steered_bridge.name }}</p>
+                        <p>{{ steered_bridge.description }}</p>
+                    </div>
+                    <div class="manual-action">
+                        <p class="text-left"><a href="{% url 'manual_steered_bridge_detail' steered_bridge.id %}" class="btn btn-secondary btn-sm">Detail</a></p>
+                        <p class="text-left"><a href="{% url 'manual_steered_bridge_update' steered_bridge.id  %}" class="btn btn-secondary btn-sm">Update</a></p>
+                        <p class="text-left"><a href="{% url 'manual_steered_bridge_delete' steered_bridge.id %}" class="btn btn-secondary btn-sm">Delete</a></p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+        <div class="manual">
+            <h2>Виды ТО</h2>
+            <p class="text-left"><a href="{% url 'manual_maintenance_create' %}" class="btn btn-secondary btn-sm">Новый вид ТО</a></p>
+            {% for maintenance in maintenances %}
+                <div class="manual-detail">
+                    <div class="manual-info">
+                        <p>{{ maintenance.name }}</p>
+                        <p>{{ maintenance.description }}</p>
+                    </div>
+                    <div class="manual-action">
+                        <p class="text-left"><a href="{% url 'manual_maintenance_detail' maintenance.id %}" class="btn btn-secondary btn-sm">Detail</a></p>
+                        <p class="text-left"><a href="{% url 'manual_maintenance_update' maintenance.id  %}" class="btn btn-secondary btn-sm">Update</a></p>
+                        <p class="text-left"><a href="{% url 'manual_maintenance_delete' maintenance.id %}" class="btn btn-secondary btn-sm">Delete</a></p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+        <div class="manual">
+            <h2>Виды узлов отказа</h2>
+            <p class="text-left"><a href="{% url 'manual_node_failure_create' %}" class="btn btn-secondary btn-sm">Новый узел отказа</a></p>
+            {% for failure in failures %}
+                <div class="manual-detail">
+                    <div class="manual-info">
+                        <p>{{ failure.name }}</p>
+                        <p>{{ failure.description }}</p>
+                    </div>
+                    <div class="manual-action">
+                        <p class="text-left"><a href="{% url 'manual_node_failure_detail' failure.id %}" class="btn btn-secondary btn-sm">Detail</a></p>
+                        <p class="text-left"><a href="{% url 'manual_node_failure_update' failure.id  %}" class="btn btn-secondary btn-sm">Update</a></p>
+                        <p class="text-left"><a href="{% url 'manual_node_failure_delete' failure.id %}" class="btn btn-secondary btn-sm">Delete</a></p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+        <div class="manual">
+            <h2>Виды способов восстановления</h2>
+            <p class="text-left"><a href="{% url 'manual_recovery_method_create' %}" class="btn btn-secondary btn-sm">Новый способ восстановления</a></p>
+            {% for method in methods %}
+                <div class="manual-detail">
+                    <div class="manual-info">
+                        <p>{{ method.name }}</p>
+                        <p>{{ method.description }}</p>
+                    </div>
+                    <div class="manual-action">
+                        <p class="text-left"><a href="{% url 'manual_recovery_method_detail' method.id %}" class="btn btn-secondary btn-sm">Detail</a></p>
+                        <p class="text-left"><a href="{% url 'manual_recovery_method_update' method.id  %}" class="btn btn-secondary btn-sm">Update</a></p>
+                        <p class="text-left"><a href="{% url 'manual_recovery_method_delete' method.id %}" class="btn btn-secondary btn-sm">Delete</a></p>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock content %}

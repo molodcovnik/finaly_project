@@ -1,0 +1,13 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+
+{% block content %}
+<h1 class="manual-create-form">Manual</h1>
+<hr>
+<form class="form-manual-create" action="" method="post">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <input type="submit" value="Save" />
+</form>
+{% endblock content %}

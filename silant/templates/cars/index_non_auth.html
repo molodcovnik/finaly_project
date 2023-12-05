@@ -1,0 +1,54 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="search-container-non-auth">
+        <h2>Проверьте комплектацию и технические характеристики техники Силант</h2>
+        <form class="search-form-non-auth" action="" method="POST">
+            {% csrf_token %}
+            {{ form.as_div }}
+
+            <input type="Submit" name="submit" value="Search" />
+        </form>
+        {% if submitBtn == "Search" %}
+
+            {% if machines %}
+                <p class="result-info">Информация о комплектации и технических характеристиках Вашей техники</p>
+                <table class="table-search-results" cellpadding="0" cellspacing="0" width="100%" align="center" class="table-600">
+                    <tr class="table-search-header">
+                        <td align="center">Модель техники</td>
+                        <td align="center">Зав. № машины</td>
+                        <td align="center">Модель двигателя</td>
+                        <td align="center">Зав. № двигателя</td>
+                        <td align="center">Модель трансмиссии</td>
+                        <td align="center">Зав. № трансмиссии</td>
+                        <td align="center">Модель ведущего моста</td>
+                        <td align="center">Зав. № ведущего моста</td>
+                        <td align="center">Модель управляемого моста</td>
+                        <td align="center">Зав. № управляемого моста</td>
+                    </tr>
+                    <tr class="table-search-result">
+                        {% for machine in machines %}
+                            <td align="center">{{machine.model_technique.name}}</td>
+                            <td align="center">{{machine.serial_number_technique}}</td>
+                            <td align="center">{{machine.model_engine.name}}</td>
+                            <td align="center">{{machine.serial_number_engine}}</td>
+                            <td align="center">{{machine.model_transmission.name}}</td>
+                            <td align="center">{{machine.serial_number_transmission}}</td>
+                            <td align="center">{{machine.model_driving_bridge.name}}</td>
+                            <td align="center">{{machine.serial_number_driving_bridge}}</td>
+                            <td align="center">{{machine.model_steered_bridge.name}}</td>
+                            <td align="center">{{machine.serial_number_steered_bridge}}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+                
+            {% else %}
+                <p>Не найдено</p>
+            {% endif %}
+        {% endif %}
+    </div>
+
+
+{% endblock content %}

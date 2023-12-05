@@ -1,0 +1,32 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+
+{% block content %}
+{{request.user}}
+{% if not user.is_authenticated %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="Submit" name="submit" value="Submit"/>
+    </form>
+    {% if submit_button == "Submit" %}
+        {{f}}
+    {% endif %}
+    {% if qs %}
+        {% for q in qs %}
+            <p>{{q.model_technique.name}}</p>
+            <p>{{q.serial_number_technique}}</p>
+        {% endfor %}
+    {% endif %}
+{% else %}
+    <p>reg</p>
+    {% if cars %}
+        {% for car in cars %}
+            <p>{{car.serial_number_technique}}</p>
+        {% endfor %}
+    {% else %}
+        <p>empty</p>
+    {% endif %}
+{% endif %}
+{% endblock content %}
