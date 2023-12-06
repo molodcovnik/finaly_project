@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 from manuals.models import *
 from accounts.models import ClientUser
@@ -24,9 +25,17 @@ class Machine(models.Model):
     customer = models.ForeignKey(ClientUser, on_delete=models.CASCADE,related_name='clients', limit_choices_to={'status': 'CLIENT'})
     service_company = models.ForeignKey(ClientUser, on_delete=models.CASCADE, related_name='services', limit_choices_to={'status': 'SERVICE'})
 
+    class Meta:
+        ordering = ['-shipment_date']
+
     def __str__(self):
         return f'{self.model_technique} {self.serial_number_technique} {self.model_engine} {self.serial_number_engine} {self.shipment_date} {self.consignee} {self.delivery_address} {self.customer} {self.service_company}'
 
+    def get_absolute_url(self):
+        return reverse('machine_detail', args=[str(self.id)])
+
+    def get_shipment_date(self):
+        return (self.shipment_date).strftime("%d.%m.%Y")
 
 class Maintenance(models.Model):
     machine = models.ForeignKey(Machine, on_delete=models.CASCADE)

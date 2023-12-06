@@ -9,13 +9,13 @@
             {% csrf_token %}
             {{ form.as_div }}
 
-            <input type="Submit" name="submit" value="Search" />
+            <button type="submit" name="submit" value="Search">Поиск</button>
         </form>
         {% if submitBtn == "Search" %}
 
             {% if machines %}
                 <p class="result-info">Информация о комплектации и технических характеристиках Вашей техники</p>
-                <table class="table-search-results" cellpadding="0" cellspacing="0" width="100%" align="center" class="table-600">
+                <table class="table-search-results" cellpadding="0" cellspacing="0" width="100%" align="center">
                     <tr class="table-search-header">
                         <td align="center">Модель техники</td>
                         <td align="center">Зав. № машины</td>
@@ -28,24 +28,24 @@
                         <td align="center">Модель управляемого моста</td>
                         <td align="center">Зав. № управляемого моста</td>
                     </tr>
-                    <tr class="table-search-result">
-                        {% for machine in machines %}
-                            <td align="center">{{machine.model_technique.name}}</td>
+                    {% for machine in machines %}
+                        <tr class="table-search-result">
+                            <td align="center"><a href="{% url 'manual_tech_detail' machine.model_technique.id %}">{{machine.model_technique.name}}</a></td>
                             <td align="center">{{machine.serial_number_technique}}</td>
-                            <td align="center">{{machine.model_engine.name}}</td>
+                            <td align="center"><a href="{% url 'manual_engine_detail' machine.model_engine.id %}">{{machine.model_engine.name}}</a></td>
                             <td align="center">{{machine.serial_number_engine}}</td>
-                            <td align="center">{{machine.model_transmission.name}}</td>
+                            <td align="center"><a href="{% url 'manual_transmission_detail' machine.model_transmission.id %}">{{machine.model_transmission.name}}</a></td>
                             <td align="center">{{machine.serial_number_transmission}}</td>
-                            <td align="center">{{machine.model_driving_bridge.name}}</td>
+                            <td align="center"><a href="{% url 'manual_driving_bridge_detail' machine.model_driving_bridge.id %}">{{machine.model_driving_bridge.name}}</a></td>
                             <td align="center">{{machine.serial_number_driving_bridge}}</td>
-                            <td align="center">{{machine.model_steered_bridge.name}}</td>
+                            <td align="center"><a href="{% url 'manual_steered_bridge_detail' machine.model_steered_bridge.id %}">{{machine.model_steered_bridge.name}}</a></td>
                             <td align="center">{{machine.serial_number_steered_bridge}}</td>
-                        {% endfor %}
-                    </tr>
+                        </tr>
+                    {% endfor %}
                 </table>
                 
             {% else %}
-                <p>Не найдено</p>
+                <div class="results-not-found"><p>Машины с номером {{ number }} не найдено.</p></div>
             {% endif %}
         {% endif %}
     </div>

@@ -1,0 +1,29 @@
+.machines-table table, .machines-table th, .machines-table td {
+    margin-top: 50px;
+    border: 1px solid;
+    
+}
+
+.machines-table {
+    box-shadow: 0px 0px 25px 0px #bbb8b8;
+}
+
+.machines-table tr:first-of-type td {
+    font-weight: bold;
+    font-size: .8rem;
+    background-color: #EBE6D6;
+}
+
+.machines-table-results td {
+    font-size: .8rem;
+}
+
+.machines-table tr:first-of-type {
+    height: 60px;
+}
+
+
+.machines-table-results td {
+    height: 50px;
+    overflow-y: scroll;
+}

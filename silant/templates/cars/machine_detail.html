@@ -1,0 +1,48 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+
+{% block content %}
+    <a href="{% url 'machine_update' car.pk %}">Update</a>
+    <a href="{% url 'machine_delete' car.pk %}">Delete</a>
+    <table class="machines-table" cellpadding="0" cellspacing="0" width="100%" align="center">
+        <tr>
+            <td align="center">Модель техники</td>
+            <td align="center">Зав. № машины</td>
+            <td align="center">Модель двигателя</td>
+            <td align="center">Зав. № двигателя</td>
+            <td align="center">Модель трансмиссии</td>
+            <td align="center">Зав. № трансмиссии</td>
+            <td align="center">Модель ведущего моста</td>
+            <td align="center">Зав. № ведущего моста</td>
+            <td align="center">Модель управляемого моста</td>
+            <td align="center">Зав. № управляемого моста</td>
+            <td align="center">Дата отгрузки с завода</td>
+            <td align="center">Договор №, дата</td>
+            <td align="center">Покупатель</td>
+            <td align="center">Грузополучатель</td>
+            <td align="center">Адрес поставки</td>
+            <td align="center">Комплектация</td>
+            <td align="center">Сервисная компания</td>
+        </tr>
+        <tr class="machines-table-results" >
+            <td align="center">{{car.model_technique.name}}</td>
+            <td align="center">{{car.serial_number_technique}}</td>
+            <td align="center">{{car.model_engine.name}}</td>
+            <td align="center">{{car.serial_number_engine}}</td>
+            <td align="center">{{car.model_transmission.name}}</td>
+            <td align="center">{{car.serial_number_transmission}}</td>
+            <td align="center">{{car.model_driving_bridge.name}}</td>
+            <td align="center">{{car.serial_number_driving_bridge}}</td>
+            <td align="center">{{car.model_steered_bridge.name}}</td>
+            <td align="center">{{car.serial_number_steered_bridge}}</td>
+            <td align="center">{{car.get_shipment_date}}</td>
+            <td align="center">{{car.supply_contract}}</td>
+            <td align="center">{{car.customer.name_company}}</td>
+            <td align="center">{{car.consignee}}</td>
+            <td align="center">{{car.delivery_address}}</td>
+            <td align="center">{{car.equipment}}</td>
+            <td align="center">{{car.service_company.name_company}}</td>
+        </tr>
+    </table>
+{% endblock content %}

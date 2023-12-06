@@ -3,13 +3,8 @@
 {% load static %}
 
 {% block content %}
-{{request.user}}
-{% if machines %}
-    <form class="search-form-non-auth" action="" method="GET">
-        {{ form.as_div }}
-
-        <button type="submit" name="submit" value="Search">Поиск</button>
-    </form>
+<a href="{% url 'machine_create' %}">Create machine</a>
+    {% if machines %}
         <table class="machines-table" cellpadding="0" cellspacing="0" width="100%" align="center">
             <tr>
                 <td align="center">Модель техники</td>
@@ -54,32 +49,7 @@
         </table>
 
     {% else %}
-        <form class="search-form-non-auth" action="" method="GET">
-            {{ form.as_div }}
-
-            <button type="submit" name="submit" value="Search">Поиск</button>
-        </form>
-        <table class="machines-table" cellpadding="0" cellspacing="0" width="100%" align="center">
-            <tr>
-                <td align="center">Модель техники</td>
-                <td align="center">Зав. № машины</td>
-                <td align="center">Модель двигателя</td>
-                <td align="center">Зав. № двигателя</td>
-                <td align="center">Модель трансмиссии</td>
-                <td align="center">Зав. № трансмиссии</td>
-                <td align="center">Модель ведущего моста</td>
-                <td align="center">Зав. № ведущего моста</td>
-                <td align="center">Модель управляемого моста</td>
-                <td align="center">Зав. № управляемого моста</td>
-                <td align="center">Дата отгрузки с завода</td>
-                <td align="center">Договор №, дата</td>
-                <td align="center">Покупатель</td>
-                <td align="center">Грузополучатель</td>
-                <td align="center">Адрес поставки</td>
-                <td align="center">Комплектация</td>
-                <td align="center">Сервисная компания</td>
-            </tr>
-        </table>
+        <p>Empty</p>
     {% endif %}
 
 {% endblock content %}
