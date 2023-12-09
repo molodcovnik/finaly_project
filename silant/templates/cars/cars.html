@@ -4,82 +4,135 @@
 
 {% block content %}
 {{request.user}}
-{% if machines %}
-    <form class="search-form-non-auth" action="" method="GET">
-        {{ form.as_div }}
-
-        <button type="submit" name="submit" value="Search">Поиск</button>
-    </form>
-        <table class="machines-table" cellpadding="0" cellspacing="0" width="100%" align="center">
-            <tr>
-                <td align="center">Модель техники</td>
-                <td align="center">Зав. № машины</td>
-                <td align="center">Модель двигателя</td>
-                <td align="center">Зав. № двигателя</td>
-                <td align="center">Модель трансмиссии</td>
-                <td align="center">Зав. № трансмиссии</td>
-                <td align="center">Модель ведущего моста</td>
-                <td align="center">Зав. № ведущего моста</td>
-                <td align="center">Модель управляемого моста</td>
-                <td align="center">Зав. № управляемого моста</td>
-                <td align="center">Дата отгрузки с завода</td>
-                <td align="center">Договор №, дата</td>
-                <td align="center">Покупатель</td>
-                <td align="center">Грузополучатель</td>
-                <td align="center">Адрес поставки</td>
-                <td align="center">Комплектация</td>
-                <td align="center">Сервисная компания</td>
-            </tr>
-            {% for car in machines %}
-            <tr class="machines-table-results" >
-                <td align="center">{{car.model_technique.name}}</td>
-                <td align="center"><a href="{% url 'machine_detail' car.pk%}" title="Посмотреть детали машины">{{car.serial_number_technique}}</a></td>
-                <td align="center">{{car.model_engine.name}}</td>
-                <td align="center">{{car.serial_number_engine}}</td>
-                <td align="center">{{car.model_transmission.name}}</td>
-                <td align="center">{{car.serial_number_transmission}}</td>
-                <td align="center">{{car.model_driving_bridge.name}}</td>
-                <td align="center">{{car.serial_number_driving_bridge}}</td>
-                <td align="center">{{car.model_steered_bridge.name}}</td>
-                <td align="center">{{car.serial_number_steered_bridge}}</td>
-                <td align="center">{{car.get_shipment_date}}</td>
-                <td align="center">{{car.supply_contract}}</td>
-                <td align="center">{{car.customer.name_company}}</td>
-                <td align="center">{{car.consignee}}</td>
-                <td align="center">{{car.delivery_address}}</td>
-                <td align="center">{{car.equipment}}</td>
-                <td align="center">{{car.service_company.name_company}}</td>
-            </tr>
-            {% endfor %}
-        </table>
-
-    {% else %}
+<div class="main-page-container-all-block">
+    <div class="main-page-machines">
+        {% if machines %}
         <form class="search-form-non-auth" action="" method="GET">
-            {{ form.as_div }}
+            {{ form_machine.as_div }}
 
             <button type="submit" name="submit" value="Search">Поиск</button>
         </form>
-        <table class="machines-table" cellpadding="0" cellspacing="0" width="100%" align="center">
+            <table class="machines-table" cellpadding="0" cellspacing="0" width="100%" align="center">
+                <tr>
+                    <td align="center">Модель техники</td>
+                    <td align="center">Зав. № машины</td>
+                    <td align="center">Модель двигателя</td>
+                    <td align="center">Зав. № двигателя</td>
+                    <td align="center">Модель трансмиссии</td>
+                    <td align="center">Зав. № трансмиссии</td>
+                    <td align="center">Модель ведущего моста</td>
+                    <td align="center">Зав. № ведущего моста</td>
+                    <td align="center">Модель управляемого моста</td>
+                    <td align="center">Зав. № управляемого моста</td>
+                    <td align="center">Дата отгрузки с завода</td>
+                    <td align="center">Договор №, дата</td>
+                    <td align="center">Покупатель</td>
+                    <td align="center">Грузополучатель</td>
+                    <td align="center">Адрес поставки</td>
+                    <td align="center">Комплектация</td>
+                    <td align="center">Сервисная компания</td>
+                </tr>
+                {% for car in machines %}
+                <tr class="machines-table-results" >
+                    <td align="center">{{car.model_technique.name}}</td>
+                    <td align="center"><a href="{% url 'machine_detail' car.pk%}" title="Посмотреть детали машины">{{car.serial_number_technique}}</a></td>
+                    <td align="center">{{car.model_engine.name}}</td>
+                    <td align="center">{{car.serial_number_engine}}</td>
+                    <td align="center">{{car.model_transmission.name}}</td>
+                    <td align="center">{{car.serial_number_transmission}}</td>
+                    <td align="center">{{car.model_driving_bridge.name}}</td>
+                    <td align="center">{{car.serial_number_driving_bridge}}</td>
+                    <td align="center">{{car.model_steered_bridge.name}}</td>
+                    <td align="center">{{car.serial_number_steered_bridge}}</td>
+                    <td align="center">{{car.get_shipment_date}}</td>
+                    <td align="center">{{car.supply_contract}}</td>
+                    <td align="center">{{car.customer.name_company}}</td>
+                    <td align="center">{{car.consignee}}</td>
+                    <td align="center">{{car.delivery_address}}</td>
+                    <td align="center">{{car.equipment}}</td>
+                    <td align="center">{{car.service_company.name_company}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <form class="search-form-non-auth" action="" method="GET">
+                {{ form.as_div }}
+
+                <button type="submit" name="submit" value="Search">Поиск</button>
+            </form>
+            <table class="machines-table" cellpadding="0" cellspacing="0" width="100%" align="center">
+                <tr>
+                    <td align="center">Модель техники</td>
+                    <td align="center">Зав. № машины</td>
+                    <td align="center">Модель двигателя</td>
+                    <td align="center">Зав. № двигателя</td>
+                    <td align="center">Модель трансмиссии</td>
+                    <td align="center">Зав. № трансмиссии</td>
+                    <td align="center">Модель ведущего моста</td>
+                    <td align="center">Зав. № ведущего моста</td>
+                    <td align="center">Модель управляемого моста</td>
+                    <td align="center">Зав. № управляемого моста</td>
+                    <td align="center">Дата отгрузки с завода</td>
+                    <td align="center">Договор №, дата</td>
+                    <td align="center">Покупатель</td>
+                    <td align="center">Грузополучатель</td>
+                    <td align="center">Адрес поставки</td>
+                    <td align="center">Комплектация</td>
+                    <td align="center">Сервисная компания</td>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+    <div class="main-page-maintenance">
+        {% if maintenances %}
+            <form class="search-form-non-auth" action="" method="GET">
+                {{ form_maintenance.as_div }}
+
+                <button type="submit" name="submit" value="Search">Поиск</button>
+            </form>
+            <table class="machines-table maintenance-table" cellpadding="0" cellspacing="0" width="100%" align="center">
+                <tr>
+                    <td align="center">Зав. № машины</td>
+                    <td align="center">Вид ТО</td>
+                    <td align="center">Дата проведения ТО</td>
+                    <td align="center">Наработка, м/час</td>
+                    <td align="center">№ заказ-наряда</td>
+                    <td align="center">Дата заказ-наряда</td>
+                    <td align="center">Организация проводившая ТО</td>
+                </tr>
+                {% for maintenance in maintenances %}
+                <tr class="machines-table-results " >
+                    <td align="center"><a href="{% url 'maintenance_detail' maintenance.pk %}">{{maintenance.machine.serial_number_technique}}</a></td>
+                    <td align="center"><a href="{% url 'manual_maintenance_detail' maintenance.maintenance_type.pk %}">{{maintenance.maintenance_type.name}}</a></td>
+                    <td align="center">{{maintenance.get_service_date}}</td>
+                    <td align="center">{{maintenance.operating_time}}</td>
+                    <td align="center">{{maintenance.work_order_number}}</td>
+                    <td align="center">{{maintenance.get_work_order_date}}</td>
+                    <td align="center">{% if maintenance.service_company %} {{maintenance.service_company.name_company}}{% else %}самостоятельно{% endif%}</td>
+
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+        <form class="search-form-non-auth" action="" method="GET">
+            {{ form_maintenance.as_div }}
+
+            <button type="submit" name="submit" value="Search">Поиск</button>
+        </form>
+        <table class="machines-table maintenance-table" cellpadding="0" cellspacing="0" width="100%" align="center">
             <tr>
-                <td align="center">Модель техники</td>
                 <td align="center">Зав. № машины</td>
-                <td align="center">Модель двигателя</td>
-                <td align="center">Зав. № двигателя</td>
-                <td align="center">Модель трансмиссии</td>
-                <td align="center">Зав. № трансмиссии</td>
-                <td align="center">Модель ведущего моста</td>
-                <td align="center">Зав. № ведущего моста</td>
-                <td align="center">Модель управляемого моста</td>
-                <td align="center">Зав. № управляемого моста</td>
-                <td align="center">Дата отгрузки с завода</td>
-                <td align="center">Договор №, дата</td>
-                <td align="center">Покупатель</td>
-                <td align="center">Грузополучатель</td>
-                <td align="center">Адрес поставки</td>
-                <td align="center">Комплектация</td>
-                <td align="center">Сервисная компания</td>
+                <td align="center">Вид ТО</td>
+                <td align="center">Дата проведения ТО</td>
+                <td align="center">Наработка, м/час</td>
+                <td align="center">№ заказ-наряда</td>
+                <td align="center">Дата заказ-наряда</td>
+                <td align="center">Организация проводившая ТО</td>
             </tr>
         </table>
-    {% endif %}
+        {% endif %}
+    </div>
+</div>
 
 {% endblock content %}

@@ -1,0 +1,37 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+
+{% block content %}
+
+{% if maintenances %}
+    <a href="{% url 'maintenance_create' %}">Create maintenance</a>
+        <table class="machines-table maintenance-table" cellpadding="0" cellspacing="0" width="100%" align="center">
+            <tr>
+                <td align="center">Зав. № машины</td>
+                <td align="center">Вид ТО</td>
+                <td align="center">Дата проведения ТО</td>
+                <td align="center">Наработка, м/час</td>
+                <td align="center">№ заказ-наряда</td>
+                <td align="center">Дата заказ-наряда</td>
+                <td align="center">Организация проводившая ТО</td>
+            </tr>
+            {% for maintenance in maintenances %}
+            <tr class="machines-table-results " >
+                <td align="center"><a href="{% url 'maintenance_detail' maintenance.pk %}">{{maintenance.machine.serial_number_technique}}</a></td>
+                <td align="center"><a href="{% url 'manual_maintenance_detail' maintenance.maintenance_type.pk %}">{{maintenance.maintenance_type.name}}</a></td>
+                <td align="center">{{maintenance.get_service_date}}</td>
+                <td align="center">{{maintenance.operating_time}}</td>
+                <td align="center">{{maintenance.work_order_number}}</td>
+                <td align="center">{{maintenance.get_work_order_date}}</td>
+                <td align="center">{% if maintenance.service_company %} {{maintenance.service_company.name_company}}{% else %}самостоятельно{% endif%}</td>
+
+            </tr>
+            {% endfor %}
+        </table>
+
+    {% else %}
+        <p>Empty</p>
+    {% endif %}
+
+{% endblock content %}

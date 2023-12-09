@@ -1,6 +1,8 @@
-from django_filters import FilterSet, ChoiceFilter, ModelChoiceFilter
-from .models import Machine
-from manuals.models import ModelEquipment, ModelEngine, ModelTransmission, ModelDrivingBridge, ModelSteeredBridge
+from django_filters import FilterSet, ChoiceFilter, ModelChoiceFilter, CharFilter
+from .models import Machine, Maintenance
+from accounts.models import ClientUser
+from manuals.models import ModelEquipment, ModelEngine, ModelTransmission, ModelDrivingBridge, ModelSteeredBridge, \
+    TypeMaintenance
 
 
 class MachineFilter(FilterSet):
@@ -33,3 +35,32 @@ class MachineFilter(FilterSet):
         queryset=ModelSteeredBridge.objects.all(),
         label='Модель управляемого моста',
     )
+
+
+class MaintenanceFilter(FilterSet):
+    machine = CharFilter(
+        field_name='machine__serial_number_technique',
+        lookup_expr='icontains',
+        label='Зав. № машины')
+
+    maintenance_type = ModelChoiceFilter(
+        field_name='maintenance_type',
+        queryset=TypeMaintenance.objects.all(),
+        label='Вид ТО')
+
+    service_company = ModelChoiceFilter(
+        field_name='service_company',
+        queryset=ClientUser.objects.filter(status='SERVICE'),
+        label='Сервисная компания')
+
+
+class MaintenanceFilterForService(FilterSet):
+    machine = CharFilter(
+        field_name='machine__serial_number_technique',
+        lookup_expr='icontains',
+        label='Зав. № машины')
+
+    maintenance_type = ModelChoiceFilter(
+        field_name='maintenance_type',
+        queryset=TypeMaintenance.objects.all(),
+        label='Вид ТО')

@@ -29,13 +29,14 @@ class Machine(models.Model):
         ordering = ['-shipment_date']
 
     def __str__(self):
-        return f'{self.model_technique} {self.serial_number_technique} {self.model_engine} {self.serial_number_engine} {self.shipment_date} {self.consignee} {self.delivery_address} {self.customer} {self.service_company}'
+        return f'{self.model_technique} {self.serial_number_technique} {self.customer.name_company} {self.service_company.name_company}'
 
     def get_absolute_url(self):
         return reverse('machine_detail', args=[str(self.id)])
 
     def get_shipment_date(self):
         return (self.shipment_date).strftime("%d.%m.%Y")
+
 
 class Maintenance(models.Model):
     machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
@@ -48,8 +49,20 @@ class Maintenance(models.Model):
                                         related_name='maintenances', limit_choices_to={'status': 'SERVICE'},
                                         null=True, blank=True)
 
+    class Meta:
+        ordering = ['-service_date']
+
     def __str__(self):
         return f'{self.machine} {self.maintenance_type} {self.service_date} {self.operating_time} {self.service_company} '
+
+    def get_absolute_url(self):
+        return reverse('maintenance_detail', args=[str(self.id)])
+
+    def get_service_date(self):
+        return (self.service_date).strftime("%d.%m.%Y")
+
+    def get_work_order_date(self):
+        return (self.work_order_date).strftime("%d.%m.%Y")
 
 
 class Claim(models.Model):

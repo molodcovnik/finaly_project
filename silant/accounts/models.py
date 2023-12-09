@@ -16,4 +16,4 @@ class ClientUser(models.Model):
     name_company = models.CharField(max_length=128, blank=True, unique=True)
 
     def __str__(self):
-        return f'{self.user}, {self.status}, {self.name_company}'
+        return f'{self.name_company}'

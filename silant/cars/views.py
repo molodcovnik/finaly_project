@@ -1,12 +1,17 @@
+from itertools import chain
+
+from django.contrib import messages
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.core.exceptions import PermissionDenied
-from .filters import MachineFilter
-from .models import Machine
-from .forms import SearchForm, MachineForm
+from .filters import MachineFilter, MaintenanceFilter, MaintenanceFilterForService
+from .models import Machine, Maintenance, Claim
+from .forms import SearchForm, MachineForm, MaintenanceForm, MaintenanceUpdateForm
 
 
 # def index(request):
@@ -48,9 +53,24 @@ def index(request):
             machines = Machine.objects.all()
             machine_filters = MachineFilter(request.GET, queryset=machines)
 
+        if user.is_staff:
+            maintenances = Maintenance.objects.all()
+            maintenance_filters = MaintenanceFilter(request.GET, queryset=maintenances)
+        elif user.clientuser.status == 'CLIENT':
+            maintenances = Maintenance.objects.filter(machine__customer__user=user)
+            maintenance_filters = MaintenanceFilter(request.GET, queryset=maintenances)
+        elif user.clientuser.status == 'SERVICE':
+            maintenances = Maintenance.objects.filter(service_company__user=user)
+            maintenance_filters = MaintenanceFilterForService(request.GET, queryset=maintenances)
+        elif user.clientuser.status == 'MANAGER':
+            maintenances = Maintenance.objects.all()
+            maintenance_filters = MaintenanceFilter(request.GET, queryset=maintenances)
+
         context = {
-            'form': machine_filters.form,
+            'form_machine': machine_filters.form,
             'machines': machine_filters.qs,
+            'form_maintenance': maintenance_filters.form,
+            'maintenances': maintenance_filters.qs,
         }
         return render(request, 'cars/cars.html', context)
     else:
@@ -77,7 +97,6 @@ def index(request):
 
 class MachinesList(ListView):
     model = Machine
-    # queryset = Machine.objects.all()
     template_name = 'cars/machines.html'
     context_object_name = 'machines'
 
@@ -93,6 +112,7 @@ class MachinesList(ListView):
             qs = Machine.objects.all()
         return qs
 
+
 class MachineDetail(DetailView):
     model = Machine
     template_name = 'cars/machine_detail.html'
@@ -100,6 +120,21 @@ class MachineDetail(DetailView):
 
     def get_success_url(self, **kwargs):
         return reverse_lazy('machine_detail', kwargs={'pk': self.get_object().id})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        print(user.id)
+        machine = Machine.objects.filter(id=self.kwargs['pk'])
+        customer = machine.values_list('customer__user', flat=True)
+        service = machine.values_list('service_company__user', flat=True)
+        admins = User.objects.filter(is_staff=True).values_list('id', flat=True)
+        managers = User.objects.filter(clientuser__status='MANAGER').values_list('id', flat=True)
+        access_list = list(chain(customer, service, admins, managers))
+        print(access_list)
+        if user.id not in access_list:
+            raise PermissionDenied
+        return context
 
 
 class MachineCreate(CreateView):
@@ -140,4 +175,99 @@ class MachineDelete(DeleteView):
         if self.request.user not in users:
             raise PermissionDenied
         return kwargs
+
+
+class MaintenanceList(ListView):
+    model = Maintenance
+    template_name = 'cars/maintenances.html'
+    context_object_name = 'maintenances'
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            qs = Maintenance.objects.all()
+        elif user.clientuser.status == 'CLIENT':
+            qs = Maintenance.objects.filter(machine__customer__user=user)
+        elif user.clientuser.status == 'SERVICE':
+            qs = Maintenance.objects.filter(service_company__user=user)
+        elif user.clientuser.status == 'MANAGER':
+            qs = Maintenance.objects.all()
+        return qs
+
+
+def get_maintenance_permission(user, pk):
+    maintenance = Maintenance.objects.filter(id=pk)
+    customer = maintenance.values_list('machine__customer__user', flat=True)
+    service = maintenance.values_list('service_company__user', flat=True)
+    admins = User.objects.filter(is_staff=True).values_list('id', flat=True)
+    managers = User.objects.filter(clientuser__status='MANAGER').values_list('id', flat=True)
+    access_list = list(chain(customer, service, admins, managers))
+    if user.id in access_list:
+        return True
+    raise PermissionDenied
+
+
+class MaintenanceDetail(DetailView, PermissionRequiredMixin):
+    model = Maintenance
+    raise_exception = True
+    template_name = 'cars/maintenance_detail.html'
+    context_object_name = 'maintenance'
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('maintenance_detail', kwargs={'pk': self.get_object().id})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        get_maintenance_permission(user, self.kwargs['pk'])
+        return context
+
+
+class MaintenanceCreate(CreateView):
+    raise_exception = True
+    form_class = MaintenanceForm
+    model = Maintenance
+    template_name = 'cars/maintenance_create.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user.pk
+        print(kwargs)
+        users = User.objects.filter(Q(clientuser__status='MANAGER') | Q(is_staff=True) |
+                                    Q(clientuser__status='SERVICE') | Q(clientuser__status='CLIENT'))
+        if self.request.user not in users:
+            raise PermissionDenied
+        return kwargs
+
+
+class MaintenanceUpdate(UpdateView):
+    form_class = MaintenanceUpdateForm
+    model = Maintenance
+    template_name = 'cars/maintenance_update.html'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.machine = self.object.machine
+        self.object.save()
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        user = self.request.user
+        get_maintenance_permission(user, self.kwargs['pk'])
+        return kwargs
+
+
+class MaintenanceDelete(DeleteView):
+    model = Maintenance
+    template_name = 'cars/maintenance_delete.html'
+    success_url = reverse_lazy('maintenances_list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        user = self.request.user
+        print(user.id)
+        get_maintenance_permission(user, self.kwargs['pk'])
+        return kwargs
+
 

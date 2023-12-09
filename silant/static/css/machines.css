@@ -1,3 +1,6 @@
+/* .main-page-container-all-block {
+    display: flex;
+} */
 .machines-table table, .machines-table th, .machines-table td {
     margin-top: 50px;
     border: 1px solid;
@@ -26,4 +29,13 @@
 .machines-table-results td {
     height: 50px;
     overflow-y: scroll;
+}
+
+.hidden {
+    display: none;
+}
+
+.maintenance-table {
+    width: 80%;
+    margin: 0 auto;
 }
