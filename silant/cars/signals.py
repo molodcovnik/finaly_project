@@ -5,7 +5,7 @@ from .models import Claim
 
 
 @receiver(post_save, sender=Claim)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_claims(sender, instance, created, **kwargs):
     if created:
         if instance.restore_date:
             claim = instance

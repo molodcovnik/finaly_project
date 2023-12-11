@@ -1,0 +1,39 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+
+{% block content %}
+{% if claims %}
+    <table class="machines-table claims-table" cellpadding="0" cellspacing="0" width="100%" align="center">
+            <tr>
+                <td align="center">Зав. № машины</td>
+                <td align="center">Дата отказа</td>
+                <td align="center">Наработка, м/час</td>
+                <td align="center">Узел отказа</td>
+                <td align="center">Описание отказа</td>
+                <td align="center">Способ восстановления</td>
+                <td align="center">Используемые запасные части</td>
+                <td align="center">Дата восстановления</td>
+                <td align="center">Время простоя техникик</td>
+                <td align="center">Сервисная компания</td>
+
+            </tr>
+            {% for claim in claims %}
+            <tr class="machines-table-results" >
+                <td align="center"><a href="{% url 'claim_detail' claim.pk%}">{{claim.machine.serial_number_technique}}</a></td>
+                <td align="center">{{claim.get_failure_date}}</td>
+                <td align="center">{{claim.operating_time}}</td>
+                <td align="center">{{claim.node_failure.name}}</td>
+                <td align="center">{{claim.description_failure}}</td>
+                <td align="center">{{claim.recovery_method.name}}</td>
+                <td align="center">{{claim.spares}}</td>
+                <td align="center">{{claim.get_restore_date}}</td>
+                <td align="center">{{claim.downtime}}</td>
+                <td align="center">{{claim.service}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+{% else %}
+<p>empty</p>
+{% endif %}
+{% endblock content %}

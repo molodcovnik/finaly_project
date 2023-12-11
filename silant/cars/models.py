@@ -76,6 +76,9 @@ class Claim(models.Model):
     downtime = models.IntegerField(blank=True, null=True)
     machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['-failure_date']
+
     def __str__(self):
         return f'{self.failure_date} {self.operating_time} {self.node_failure} {self.description_failure} {self.recovery_method} {self.spares} {self.restore_date} {self.downtime}'
 
@@ -89,6 +92,16 @@ class Claim(models.Model):
     def service(self):
         return self.machine.service_company.name_company
 
+    def get_absolute_url(self):
+        return reverse('claim_detail', args=[str(self.id)])
+
     def update_downtime(self):
         self.downtime = (self.restore_date - self.failure_date).days
         self.save()
+        return self.downtime
+
+    def get_failure_date(self):
+        return (self.failure_date).strftime("%d.%m.%Y")
+
+    def get_restore_date(self):
+        return (self.restore_date).strftime("%d.%m.%Y")

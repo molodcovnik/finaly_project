@@ -1,7 +1,8 @@
 from itertools import chain
 
 from django.contrib import messages
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -9,9 +10,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.core.exceptions import PermissionDenied
-from .filters import MachineFilter, MaintenanceFilter, MaintenanceFilterForService
+from .filters import MachineFilter, MaintenanceFilter, MaintenanceFilterForService, ClaimsFilter
 from .models import Machine, Maintenance, Claim
-from .forms import SearchForm, MachineForm, MaintenanceForm, MaintenanceUpdateForm
+from .forms import SearchForm, MachineForm, MaintenanceForm, MaintenanceUpdateForm, ClaimForm, ClaimUpdateForm
 
 
 # def index(request):
@@ -40,6 +41,7 @@ def index(request):
     if request.user.is_authenticated:
         # machine_filters = MachineFilter(request.GET, queryset=machines)
         user = request.user
+
         if user.is_staff:
             machines = Machine.objects.all()
             machine_filters = MachineFilter(request.GET, queryset=machines)
@@ -66,11 +68,26 @@ def index(request):
             maintenances = Maintenance.objects.all()
             maintenance_filters = MaintenanceFilter(request.GET, queryset=maintenances)
 
+        if user.is_staff:
+            claims = Claim.objects.all()
+            claim_filters = ClaimsFilter(request.GET, queryset=claims)
+        elif user.clientuser.status == 'CLIENT':
+            claims = Claim.objects.filter(machine__customer__user=user)
+            claim_filters = ClaimsFilter(request.GET, queryset=claims)
+        elif user.clientuser.status == 'SERVICE':
+            claims = Claim.objects.filter(machine__service_company__user=user)
+            claim_filters = ClaimsFilter(request.GET, queryset=claims)
+        elif user.clientuser.status == 'MANAGER':
+            claims = Claim.objects.all()
+            claim_filters = ClaimsFilter(request.GET, queryset=claims)
+
         context = {
             'form_machine': machine_filters.form,
             'machines': machine_filters.qs,
             'form_maintenance': maintenance_filters.form,
             'maintenances': maintenance_filters.qs,
+            'form_claim': claim_filters.form,
+            'claims': claim_filters.qs,
         }
         return render(request, 'cars/cars.html', context)
     else:
@@ -95,7 +112,7 @@ def index(request):
         return render(request, 'cars/index_non_auth.html', context)
 
 
-class MachinesList(ListView):
+class MachinesList(ListView, LoginRequiredMixin):
     model = Machine
     template_name = 'cars/machines.html'
     context_object_name = 'machines'
@@ -207,9 +224,8 @@ def get_maintenance_permission(user, pk):
     raise PermissionDenied
 
 
-class MaintenanceDetail(DetailView, PermissionRequiredMixin):
+class MaintenanceDetail(DetailView):
     model = Maintenance
-    raise_exception = True
     template_name = 'cars/maintenance_detail.html'
     context_object_name = 'maintenance'
 
@@ -271,3 +287,102 @@ class MaintenanceDelete(DeleteView):
         return kwargs
 
 
+class ClaimsList(ListView):
+    model = Claim
+    template_name = 'cars/claims.html'
+    context_object_name = 'claims'
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            qs = Claim.objects.all()
+        elif user.clientuser.status == 'CLIENT':
+            qs = Claim.objects.filter(machine__customer__user=user)
+        elif user.clientuser.status == 'SERVICE':
+            qs = Claim.objects.filter(machine__service_company__user=user)
+        elif user.clientuser.status == 'MANAGER':
+            qs = Claim.objects.all()
+        return qs
+
+
+def get_claim_permission_watching(user, pk):
+    claim = Claim.objects.filter(id=pk)
+    service = claim.values_list('machine__service_company__user', flat=True)
+    customer = claim.values_list('machine__customer__user', flat=True)
+    admins = User.objects.filter(is_staff=True).values_list('id', flat=True)
+    managers = User.objects.filter(clientuser__status='MANAGER').values_list('id', flat=True)
+    access_list = list(chain(customer, service, admins, managers))
+    if user.id in access_list:
+        return True
+    raise PermissionDenied
+
+
+def get_claim_permission(user, pk):
+    claim = Claim.objects.filter(id=pk)
+    service = claim.values_list('machine__service_company__user', flat=True)
+    admins = User.objects.filter(is_staff=True).values_list('id', flat=True)
+    managers = User.objects.filter(clientuser__status='MANAGER').values_list('id', flat=True)
+    access_list = list(chain(service, admins, managers))
+    if user.id in access_list:
+        return True
+    raise PermissionDenied
+
+
+class ClaimCreate(CreateView):
+    form_class = ClaimForm
+    model = Claim
+    template_name = 'cars/claim_create.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user.pk
+        print(kwargs)
+        users = User.objects.filter(Q(clientuser__status='MANAGER') | Q(is_staff=True) |
+                                    Q(clientuser__status='SERVICE'))
+        if self.request.user not in users:
+            raise PermissionDenied
+        return kwargs
+
+class ClaimDetail(DetailView):
+    model = Claim
+    template_name = 'cars/claim_detail.html'
+    context_object_name = 'claim'
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('claim_detail', kwargs={'pk': self.get_object().id})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        get_claim_permission_watching(user, self.kwargs['pk'])
+        return context
+
+
+class ClaimUpdate(UpdateView):
+    form_class = ClaimUpdateForm
+    model = Claim
+    template_name = 'cars/claim_update.html'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.machine = self.object.machine
+        self.object.save()
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        user = self.request.user
+        get_claim_permission(user, self.kwargs['pk'])
+        return kwargs
+
+
+class ClaimDelete(DeleteView):
+    model = Claim
+    template_name = 'cars/claim_delete.html'
+    success_url = reverse_lazy('claims_list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        user = self.request.user
+        get_claim_permission(user, self.kwargs['pk'])
+        return kwargs

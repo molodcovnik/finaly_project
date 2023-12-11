@@ -1,6 +1,13 @@
-/* .main-page-container-all-block {
+.container {
+}
+
+a {
+    text-decoration: none;
+}
+.main-page-container-all-blocks {
     display: flex;
-} */
+}
+
 .machines-table table, .machines-table th, .machines-table td {
     margin-top: 50px;
     border: 1px solid;
@@ -38,4 +45,74 @@
 .maintenance-table {
     width: 80%;
     margin: 0 auto;
+}
+
+.claims-table {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.not-found-table {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.main-block-info {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.info-header {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.info-text {
+    margin: 20px auto;
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+.info-action-buttons {
+    text-align: center;
+}
+
+.main-page-maintenance {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.main-page-claims {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.about-page p {
+    text-align: center;
+    margin: 10px auto;
+    font-weight: bold;
+}
+
+.info-action-buttons  button {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;   
+    cursor: pointer;
+}
+
+.info-action-buttons  button:hover {
+    background-color: #EBE6D6;
+    font-weight: bold;
+    box-shadow: 0px 0px 10px 0px #EBE6D6;
+}
+
+@media only screen and (max-width: 650px) {
+    .info-action-buttons {
+        width: 90%;
+        display: flex;
+        height: auto;
+    }
 }

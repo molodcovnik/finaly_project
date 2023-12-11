@@ -5,7 +5,7 @@
 {% block content %}
 
 <form class="form-login" method="post" action="{% url 'login' %}">
-{% csrf_token %}
+    {% csrf_token %}
     {{ form.as_div }}
     <button type="submit" value="login">Войти</button>
     <input type="hidden" name="next" value="{{ next }}">

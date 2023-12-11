@@ -2,7 +2,7 @@ from django_filters import FilterSet, ChoiceFilter, ModelChoiceFilter, CharFilte
 from .models import Machine, Maintenance
 from accounts.models import ClientUser
 from manuals.models import ModelEquipment, ModelEngine, ModelTransmission, ModelDrivingBridge, ModelSteeredBridge, \
-    TypeMaintenance
+    TypeMaintenance, NodeFailure, RecoveryMethod
 
 
 class MachineFilter(FilterSet):
@@ -64,3 +64,23 @@ class MaintenanceFilterForService(FilterSet):
         field_name='maintenance_type',
         queryset=TypeMaintenance.objects.all(),
         label='Вид ТО')
+
+
+class ClaimsFilter(FilterSet):
+    node_failure = ModelChoiceFilter(
+        field_name='node_failure',
+        queryset=NodeFailure.objects.all(),
+        label='Узел отказа'
+    )
+
+    recovery_method = ModelChoiceFilter(
+        field_name='recovery_method',
+        queryset=RecoveryMethod.objects.all(),
+        label='Способ восстановления'
+    )
+
+    service_company_two = ModelChoiceFilter(
+        field_name='machine__service_company',
+        queryset=ClientUser.objects.filter(status='SERVICE'),
+        label='Сервисная компания'
+    )
