@@ -1,7 +1,7 @@
 {% extends 'flatpages/default.html' %}
 
 {% load static %}
-####login required для большинства урлов###
+
 {% block content %}
 {% if request.user.is_authenticated %}
 <div class="container">
@@ -34,7 +34,7 @@
     <div class="main-page-container-all-blocks">
         <div class="main-page-machines">
             {% if request.user.is_staff or request.user.clientuser.status == 'MANAGER' %}
-                <a href="{% url 'machine_create' %}">Create machine</a>
+                <a href="{% url 'machine_create' %}" class="create-btn">Новая машина</a>
             {% endif %}
             {% if machines %}
             <form class="search-form-non-auth machines" action="" method="GET">
@@ -46,7 +46,7 @@
                 <p>Машины</p>
             </div>
                 <table class="machines-table" cellpadding="0" cellspacing="0" width="100%" align="center">
-                    <tr>
+                    <tr class="header-table">
                         <td align="center">Модель техники</td>
                         <td align="center">Зав. № машины</td>
                         <td align="center">Модель двигателя</td>
@@ -98,7 +98,7 @@
                     <p>Машины</p>
                 </div>
                 <table class="machines-table" cellpadding="0" cellspacing="0" width="100%" align="center">
-                    <tr>
+                    <tr class="header-table">
                         <td align="center">Модель техники</td>
                         <td align="center">Зав. № машины</td>
                         <td align="center">Модель двигателя</td>
@@ -124,7 +124,7 @@
             {% endif %}
         </div>
         <div class="main-page-maintenance hidden">
-            <a href="{% url 'maintenance_create' %}">Create maintenance</a>
+            <a href="{% url 'maintenance_create' %}" class="create-btn">Новое ТО</a>
             {% if maintenances %}
                 <form class="search-form-non-auth maintenances" action="" method="GET">
                     {{ form_maintenance.as_div }}
@@ -135,7 +135,7 @@
                     <p>ТО</p>
                 </div>
                 <table class="machines-table maintenance-table" cellpadding="0" cellspacing="0" width="100%" align="center">
-                    <tr>
+                    <tr class="header-table">
                         <td align="center">Зав. № машины</td>
                         <td align="center">Вид ТО</td>
                         <td align="center">Дата проведения ТО</td>
@@ -166,7 +166,7 @@
                     <p>ТО</p>
                 </div>
                 <table class="machines-table maintenance-table" cellpadding="0" cellspacing="0" width="100%" align="center">
-                    <tr>
+                    <tr class="header-table">
                         <td align="center">Зав. № машины</td>
                         <td align="center">Вид ТО</td>
                         <td align="center">Дата проведения ТО</td>
@@ -183,10 +183,10 @@
         </div>
         <div class="main-page-claims hidden">
             {% if request.user.is_staff or request.user.clientuser.status == 'MANAGER' or request.user.clientuser.status == 'SERVICE' %}
-                <a href="{% url 'claims_create' %}">Create claim</a>
+                <a href="{% url 'claims_create' %}" class="create-btn">Новая рекламация</a>
             {% endif %}
             {% if claims %}
-            <form class="search-form-non-auth" action="" method="GET">
+            <form class="search-form-non-auth claims-form" action="" method="GET">
                 {{ form_claim.as_div }}
 
                 <button class="search-claims-btn" type="submit" name="submit" value="Search">Поиск</button>
@@ -195,7 +195,7 @@
                 <p>Рекламации</p>
             </div>
             <table class="machines-table claims-table" cellpadding="0" cellspacing="0" width="100%" align="center">
-                <tr>
+                <tr class="header-table">
                     <td align="center">Зав. № машины</td>
                     <td align="center">Дата отказа</td>
                     <td align="center">Наработка, м/час</td>
@@ -212,9 +212,9 @@
                     <td align="center"><a href="{% url 'claim_detail' claim.pk%}">{{claim.machine.serial_number_technique}}</a></td>
                     <td align="center">{{claim.get_failure_date}}</td>
                     <td align="center">{{claim.operating_time}}</td>
-                    <td align="center">{{claim.node_failure.name}}</td>
+                    <td align="center"><a href="{% url 'manual_node_failure_detail' claim.node_failure.pk%}">{{claim.node_failure.name}}</a></td>
                     <td align="center">{{claim.description_failure}}</td>
-                    <td align="center">{{claim.recovery_method.name}}</td>
+                    <td align="center"><a href="{% url 'manual_recovery_method_detail' claim.recovery_method.pk%}">{{claim.recovery_method.name}}</a></td>
                     <td align="center">{{claim.spares}}</td>
                     <td align="center">{{claim.get_restore_date}}</td>
                     <td align="center">{{claim.downtime}}</td>
@@ -223,7 +223,7 @@
                 {% endfor %}
             </table>
             {% else %}
-            <form class="search-form-non-auth" action="" method="GET">
+            <form class="search-form-non-auth claims-form" action="" method="GET">
                 {{ form_claim.as_div }}
 
                 <button class="search-claims-btn" type="submit" name="submit" value="Search">Поиск</button>
@@ -232,7 +232,7 @@
                 <p>Рекламации</p>
             </div>
             <table class="machines-table claims-table" cellpadding="0" cellspacing="0" width="100%" align="center">
-                <tr>
+                <tr class="header-table">
                     <td align="center">Зав. № машины</td>
                     <td align="center">Дата отказа</td>
                     <td align="center">Наработка, м/час</td>

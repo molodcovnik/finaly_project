@@ -15,31 +15,8 @@ from .models import Machine, Maintenance, Claim
 from .forms import SearchForm, MachineForm, MaintenanceForm, MaintenanceUpdateForm, ClaimForm, ClaimUpdateForm
 
 
-# def index(request):
-#     submit_button = request.POST.get("submit")
-#     form = SearchForm(request.POST or None)
-#     firstname = ''
-#     qs = []
-#     if form.is_valid():
-#         firstname = form.cleaned_data.get("search_field")
-#
-#     print(firstname)
-#     if firstname != '':
-#         qs = Machine.objects.filter(serial_number_technique=firstname)
-#
-#     print(qs)
-#     context = {
-#         'submit_button': submit_button,
-#         'form': form,
-#         'f': firstname,
-#         'qs': qs,
-#     }
-#     return render(request, 'cars/cars.html', context)
-
-
 def index(request):
     if request.user.is_authenticated:
-        # machine_filters = MachineFilter(request.GET, queryset=machines)
         user = request.user
 
         if user.is_staff:

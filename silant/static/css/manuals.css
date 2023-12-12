@@ -103,6 +103,22 @@
     font-size: 14px;
 }
 
+.manuals-block {
+    width: 40%;
+    border: #3174c5 1px solid;
+    border-radius: 5px;
+    padding-left: 20px;
+}
+
+.manuals-block h2 {
+    margin: 20px auto;
+}
+
+.manuals-block p:last-of-type {
+    margin: 20px auto 5px;
+}
+
+
 @media only screen and (max-width: 650px) {
     .manuals-container {
         flex-direction: column;

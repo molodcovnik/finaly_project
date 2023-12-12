@@ -16,6 +16,7 @@ a {
 
 .machines-table {
     box-shadow: 0px 0px 25px 0px #bbb8b8;
+    margin-top: 30px;
 }
 
 .machines-table tr:first-of-type td {
@@ -44,12 +45,12 @@ a {
 
 .maintenance-table {
     width: 80%;
-    margin: 0 auto;
+    margin: 20px auto;
 }
 
 .claims-table {
     width: 90%;
-    margin: 0 auto;
+    margin: 20px auto;
 }
 
 .not-found-table {
@@ -67,7 +68,7 @@ a {
 .info-header {
     text-align: center;
     font-size: 1.3rem;
-    font-weight: bold;
+    font-family: 'AstraSansBold', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .info-text {
@@ -93,7 +94,7 @@ a {
 .about-page p {
     text-align: center;
     margin: 10px auto;
-    font-weight: bold;
+    font-family: 'AstraSansBold', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .info-action-buttons  button {
@@ -109,10 +110,90 @@ a {
     box-shadow: 0px 0px 10px 0px #EBE6D6;
 }
 
+.header-table td {
+    font-family: 'AstraSansBold', 'Helvetica Neue', Arial, sans-serif;
+}
+
+
+.machines, .maintenances, .claims-form {
+    justify-content: space-around;
+    margin: 20px auto;
+}   
+
+.machines div, .maintenances div, .claims-form div{
+    display: flex;
+    flex-direction: column;
+}
+
+.machines select, .maintenances select, .claims-form select {
+    background-color: #EBE6D6;
+    border-radius: 5px;
+
+}
+
+.maintenances input[type="text"] {
+    width: auto;
+    height: auto;
+}
+
+.create-btn{
+    padding: 10px 20px;
+    background-color: #163E6C;
+    border-radius: 5px;
+    color: #ffffff;
+}
+
+
+
+.update-btn, .delete-btn {
+    padding: 10px 20px;
+    opacity: .9;
+    border-radius: 5px;
+    color: black;
+}
+
+.update-btn {
+    background-color: #bfb595;
+}
+
+.update-btn:hover, .delete-btn:hover {
+    opacity: 1.5;
+    box-shadow: 0px 0px 10px 0px #EBE6D6;
+}
+
+.delete-btn {
+    background-color: #D20A11;
+}
+
+.create-form {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.create-form input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #163E6C;
+    color: #ffffff;
+    border: none;
+    margin: 20px 25%;
+}
+
 @media only screen and (max-width: 650px) {
     .info-action-buttons {
         width: 90%;
         display: flex;
         height: auto;
     }
+
+    .create-form {
+        width: 90%;
+        margin: 0 auto;
+        
+    }
+
+    .machines, .maintenances, .claims-form {
+        display: flex;
+        flex-direction: column;
+    }   
+
 }

@@ -60,6 +60,7 @@
     border-radius: 5px;
     border: none;
     cursor: pointer;
+    font-family: 'AstraSansBold', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .search-form-non-auth input[type="text"]:focus{

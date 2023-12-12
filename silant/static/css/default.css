@@ -1,3 +1,17 @@
+@font-face{
+    font-family: 'AstraSans';
+    src: url('../fonts/PTAstraSans/PT-Astra-Sans_Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'AstraSansBold';
+    src: url('../fonts/PTAstraSans/PT-Astra-Sans_Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
 *, body, html {
     padding: 0;
     margin: 0;
@@ -23,13 +37,14 @@ header {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    font-family: 'AstraSansBold', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
 }
 
 .main-container {
     width: 98%;
     margin: 25px auto;
-
-
+    font-family: 'AstraSans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 footer {
@@ -37,6 +52,7 @@ footer {
     height: 60px;
     background-color: #163E6C;
     color: #ffffff;
+    font-family: 'AstraSansBold', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .header-head {

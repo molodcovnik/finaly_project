@@ -4,8 +4,8 @@
 
 {% block content %}
 {% if maintenance %}
-<a href="{% url 'maintenance_update' maintenance.pk %}">Update</a>
-<a href="{% url 'maintenance_delete' maintenance.pk %}">Delete</a>
+<a href="{% url 'maintenance_update' maintenance.pk %}" class="update-btn">Update</a>
+<a href="{% url 'maintenance_delete' maintenance.pk %}" class="delete-btn">Delete</a>
         <table class="machines-table maintenance-table" cellpadding="0" cellspacing="0" width="100%" align="center">
             <tr>
                 <td align="center">Зав. № машины</td>
@@ -18,7 +18,7 @@
             </tr>
             <tr class="machines-table-results " >
                 <td align="center">{{maintenance.machine.serial_number_technique}}</td>
-                <td align="center">{{maintenance.maintenance_type.name}}</td>
+                <td align="center"><a href="{% url 'manual_maintenance_detail' maintenance.maintenance_type.pk %}">{{maintenance.maintenance_type.name}}</a></td>
                 <td align="center">{{maintenance.get_service_date}}</td>
                 <td align="center">{{maintenance.operating_time}}</td>
                 <td align="center">{{maintenance.work_order_number}}</td>

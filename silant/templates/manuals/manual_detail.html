@@ -3,9 +3,13 @@
 {% load static %}
 
 {% block content %}
-
-    {{manual.name}}
-    {{manual.description}}
-    <p><a href="{% url 'manuals' %}">Return</a></p>
+    <div class="manuals-block">
+        <h2>Имя</h2>
+        <p>{{manual.name}}</p>
+        <h2>Описание</h2>
+        <p>{{manual.description}}</p>
+        <p><a href="{% url 'manuals' %}">Return</a></p>
+    </div>
+    
 
 {% endblock content %}

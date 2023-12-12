@@ -4,8 +4,8 @@
 
 {% block content %}
 {% if request.user.is_staff or request.user.clientuser.status == 'MANAGER' or request.user.clientuser.status == 'SERVICE' %}
-    <a href="{% url 'claim_update' claim.pk %}">Update</a>
-    <a href="{% url 'claim_delete' claim.pk %}">Delete</a>
+    <a href="{% url 'claim_update' claim.pk %}" class="update-btn">Update</a>
+    <a href="{% url 'claim_delete' claim.pk %}" class="delete-btn">Delete</a>
 {% endif %}
         <table class="machines-table claims-table" cellpadding="0" cellspacing="0" width="100%" align="center">
             <tr>
@@ -21,12 +21,12 @@
                 <td align="center">Сервисная компания</td>
             </tr>
             <tr class="machines-table-results" >
-                <td align="center"><a href="{% url 'machine_detail' claim.machine.pk %}">{{claim.machine.serial_number_technique}}</a></td>
+                <td align="center">{{claim.machine.serial_number_technique}}</td>
                 <td align="center">{{claim.get_failure_date}}</td>
                 <td align="center">{{claim.operating_time}}</td>
-                <td align="center">{{claim.node_failure.name}}</td>
+                <td align="center"><a href="{% url 'manual_node_failure_detail' claim.node_failure.pk%}">{{claim.node_failure.name}}</a></td>
                 <td align="center">{{claim.description_failure}}</td>
-                <td align="center">{{claim.recovery_method.name}}</td>
+                <td align="center"><a href="{% url 'manual_recovery_method_detail' claim.recovery_method.pk%}">{{claim.recovery_method.name}}</a></td>
                 <td align="center">{{claim.spares}}</td>
                 <td align="center">{{claim.get_restore_date}}</td>
                 <td align="center">{{claim.update_downtime}}</td>

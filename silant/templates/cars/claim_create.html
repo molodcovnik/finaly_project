@@ -3,10 +3,10 @@
 {% load static %}
 
 {% block content %}
-<form action="" method="post">
+<form action="" method="post" class="create-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <p>{{user}}</p>
+
     <input type="submit" value="Save" />
 </form>
 {% endblock content %}

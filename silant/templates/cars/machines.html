@@ -27,15 +27,15 @@
             </tr>
             {% for car in machines %}
             <tr class="machines-table-results" >
-                <td align="center">{{car.model_technique.name}}</td>
+                <td align="center"><a href="{% url 'manual_tech_detail' car.model_technique.pk%}">{{car.model_technique.name}}</a></td>
                 <td align="center"><a href="{% url 'machine_detail' car.pk%}" title="Посмотреть детали машины">{{car.serial_number_technique}}</a></td>
-                <td align="center">{{car.model_engine.name}}</td>
+                <td align="center"><a href="{% url 'manual_engine_detail' car.model_engine.pk%}">{{car.model_engine.name}}</a></td>
                 <td align="center">{{car.serial_number_engine}}</td>
-                <td align="center">{{car.model_transmission.name}}</td>
+                <td align="center"><a href="{% url 'manual_transmission_detail' car.model_transmission.pk%}">{{car.model_transmission.name}}</a></td>
                 <td align="center">{{car.serial_number_transmission}}</td>
-                <td align="center">{{car.model_driving_bridge.name}}</td>
+                <td align="center"><a href="{% url 'manual_driving_bridge_detail' car.model_driving_bridge.pk%}">{{car.model_driving_bridge.name}}</a></td>
                 <td align="center">{{car.serial_number_driving_bridge}}</td>
-                <td align="center">{{car.model_steered_bridge.name}}</td>
+                <td align="center"><a href="{% url 'manual_steered_bridge_detail' car.model_steered_bridge.pk%}">{{car.model_steered_bridge.name}}</a></td>
                 <td align="center">{{car.serial_number_steered_bridge}}</td>
                 <td align="center">{{car.get_shipment_date}}</td>
                 <td align="center">{{car.supply_contract}}</td>
